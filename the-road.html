@@ -130,6 +130,40 @@
       margin-bottom: 8px;
     }
 
+    .project-card__badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-left: 8px;
+    }
+
+    .project-card__badge--completed {
+      color: var(--green);
+      background: var(--green-dim);
+    }
+
+    .project-card__links {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .project-card__link {
+      font-size: 0.8rem;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    .project-card__link:hover {
+      border-bottom-color: var(--accent);
+    }
+
     .project-card__title {
       font-size: 1rem;
       font-weight: 600;
@@ -356,10 +390,15 @@
         <div class="level__grid">
           <article class="project-card">
             <span class="project-card__number">01</span>
+            <span class="project-card__badge project-card__badge--completed">Completed</span>
             <h3 class="project-card__title">Data Types Playground</h3>
             <p class="project-card__goal">A single-page "Data Lab" where you add/remove/update items in each structure.</p>
             <div class="project-card__tags">
               <span class="tag">Array.isArray()</span><span class="tag">Object.keys/values/entries</span><span class="tag">Set</span><span class="tag">Map</span><span class="tag">for…in vs for…of</span>
+            </div>
+            <div class="project-card__links">
+              <a class="project-card__link" href="https://github.com/madsigntist/data-types-playground" target="_blank" rel="noopener noreferrer">Repo ↗</a>
+              <a class="project-card__link" href="https://madsigntist.github.io/data-types-playground/" target="_blank" rel="noopener noreferrer">Live Demo ↗</a>
             </div>
           </article>
           <article class="project-card">
