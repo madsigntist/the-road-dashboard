@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dashboard view of The Road — a JavaScript learning roadmap with a 16-project curriculum and a step-by-step teaching framework covering vanilla JS, browser APIs, React, and Next.js.">
+  <meta name="keywords" content="JavaScript, learning roadmap, project-based learning, vanilla JS, DOM, async/await, React, Next.js, BEM, semantic HTML, web development">
+  <title>The Road — Dashboard</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-alt: #232842;
+      --border: rgba(255, 255, 255, 0.07);
+      --text: #e2e8f0;
+      --muted: #8892a4;
+      --accent: #818cf8;
+      --accent-dim: rgba(129, 140, 248, 0.12);
+      --green: #34d399;
+      --green-dim: rgba(52, 211, 153, 0.12);
+      --amber: #fbbf24;
+      --amber-dim: rgba(251, 191, 36, 0.12);
+      --rose: #fb7185;
+      --rose-dim: rgba(251, 113, 133, 0.10);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; margin: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ---- layout ---- */
+    .dash {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 20px 64px;
+    }
+
+    .dash__header {
+      margin-bottom: 32px;
+    }
+
+    .dash__title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .dash__subtitle {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+
+    /* ---- tabs ---- */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+
+    .tabs__btn {
+      padding: 10px 20px;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 0.95rem;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .tabs__btn:hover { color: var(--text); }
+
+    .tabs__btn--active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel--active { display: block; }
+
+    /* ---- roadmap cards ---- */
+    .level {
+      margin-bottom: 36px;
+    }
+
+    .level__title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+      padding-left: 4px;
+      color: var(--accent);
+    }
+
+    .level__grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+
+    .project-card:hover {
+      border-color: rgba(129, 140, 248, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .project-card__number {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-dim);
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-bottom: 8px;
+    }
+
+    .project-card__title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .project-card__goal {
+      font-size: 0.875rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .project-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: var(--surface-alt);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    /* level color accents */
+    .level--2 .level__title { color: var(--green); }
+    .level--2 .project-card__number { color: var(--green); background: var(--green-dim); }
+    .level--3 .level__title { color: var(--amber); }
+    .level--3 .project-card__number { color: var(--amber); background: var(--amber-dim); }
+    .level--4 .level__title { color: var(--rose); }
+    .level--4 .project-card__number { color: var(--rose); background: var(--rose-dim); }
+    .level--bonus .level__title { color: var(--muted); }
+    .level--bonus .project-card__number { color: var(--muted); background: rgba(136,146,164,0.12); }
+
+    /* ---- mapping section ---- */
+    .mapping {
+      margin-top: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+    }
+
+    .mapping__title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .mapping__list {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      gap: 8px;
+    }
+
+    .mapping__item {
+      font-size: 0.875rem;
+      color: var(--muted);
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .mapping__item::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    .mapping__item strong { color: var(--text); }
+
+    /* ---- framework panel ---- */
+    .framework {
+      display: grid;
+      gap: 20px;
+    }
+
+    .fw-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .fw-section__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s;
+    }
+
+    .fw-section__header:hover { background: var(--surface-alt); }
+
+    .fw-section__title {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .fw-section__icon {
+      font-size: 1.1rem;
+      color: var(--muted);
+      transition: transform 0.25s;
+    }
+
+    .fw-section--open .fw-section__icon {
+      transform: rotate(180deg);
+    }
+
+    .fw-section__body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+    }
+
+    .fw-section--open .fw-section__body {
+      max-height: 3000px;
+    }
+
+    .fw-section__content {
+      padding: 0 20px 20px;
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .fw-section__content ul,
+    .fw-section__content ol {
+      padding-left: 20px;
+      margin: 8px 0;
+    }
+
+    .fw-section__content li { margin-bottom: 4px; }
+    .fw-section__content strong { color: var(--text); }
+    .fw-section__content code {
+      background: rgba(129, 140, 248, 0.1);
+      color: var(--accent);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.82rem;
+    }
+
+    .fw-section__content .step-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-dim);
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-bottom: 6px;
+    }
+
+    .fw-section__content blockquote {
+      border-left: 3px solid var(--accent);
+      margin: 10px 0;
+      padding: 8px 14px;
+      background: var(--accent-dim);
+      border-radius: 0 8px 8px 0;
+      color: var(--text);
+      font-size: 0.85rem;
+    }
+
+    /* ---- rules grid ---- */
+    .rules-grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+
+    .rule-card {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .rule-card__num {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-dim);
+      width: 22px;
+      height: 22px;
+      line-height: 22px;
+      text-align: center;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .rule-card strong { color: var(--text); }
+  </style>
+</head>
+
+<body>
+  <div class="dash">
+    <header class="dash__header">
+      <h1 class="dash__title">The Road</h1>
+      <p class="dash__subtitle">JavaScript learning roadmap &amp; project framework</p>
+    </header>
+
+    <nav class="tabs" role="tablist">
+      <button class="tabs__btn tabs__btn--active" role="tab" data-tab="roadmap" aria-selected="true">Project Roadmap</button>
+      <button class="tabs__btn" role="tab" data-tab="framework" aria-selected="false">Learning Framework</button>
+    </nav>
+
+    <!-- ================= ROADMAP TAB ================= -->
+    <section id="roadmap" class="tab-panel tab-panel--active" role="tabpanel">
+
+      <!-- Level 1 -->
+      <div class="level">
+        <h2 class="level__title">Level 1 — Core JavaScript + DOM + Semantic HTML/CSS</h2>
+        <div class="level__grid">
+          <article class="project-card">
+            <span class="project-card__number">01</span>
+            <h3 class="project-card__title">Data Types Playground</h3>
+            <p class="project-card__goal">A single-page "Data Lab" where you add/remove/update items in each structure.</p>
+            <div class="project-card__tags">
+              <span class="tag">Array.isArray()</span><span class="tag">Object.keys/values/entries</span><span class="tag">Set</span><span class="tag">Map</span><span class="tag">for…in vs for…of</span>
+            </div>
+          </article>
+          <article class="project-card">
+            <span class="project-card__number">02</span>
+            <h3 class="project-card__title">Semantic UI Components: Tabs + Accordion</h3>
+            <p class="project-card__goal">Build accessible, semantic UI components — no frameworks. Keyboard support, focus states, CSS transitions.</p>
+            <div class="project-card__tags">
+              <span class="tag">Semantic HTML</span><span class="tag">Keyboard a11y</span><span class="tag">CSS transitions</span>
+            </div>
+          </article>
+          <article class="project-card">
+            <span class="project-card__number">03</span>
+            <h3 class="project-card__title">Array Methods Catalog</h3>
+            <p class="project-card__goal">Mini product catalog with search, filters, and sorting using array methods.</p>
+            <div class="project-card__tags">
+              <span class="tag">filter</span><span class="tag">map</span><span class="tag">find</span><span class="tag">reduce</span><span class="tag">sort/toSorted</span><span class="tag">debounce</span>
+            </div>
+          </article>
+          <article class="project-card">
+            <span class="project-card__number">04</span>
+            <h3 class="project-card__title">Object Transformations Dashboard</h3>
+            <p class="project-card__goal">Transform object datasets into UI-friendly forms. Covers entries, fromEntries, freeze.</p>
+            <div class="project-card__tags">
+              <span class="tag">Object.entries()</span><span class="tag">Object.fromEntries()</span><span class="tag">Object.freeze()</span>
+            </div>
+          </article>
+          <article class="project-card">
+            <span class="project-card__number">05</span>
+            <h3 class="project-card__title">Storage-Based Preferences App</h3>
+            <p class="project-card__goal">Settings panel that persists preferences and drafts using browser storage.</p>
+            <div class="project-card__tags">
+              <span class="tag">localStorage</span><span class="tag">sessionStorage</span><span class="tag">JSON</span><span class="tag">theme toggle</span>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- Level 2 -->
+      <div class="level level--2">
+        <h2 class="level__title">Level 2 — Browser APIs + Async/Await + Real UI Patterns</h2>
+        <div class="level__grid">
+          <article class="project-card">
+            <span class="project-card__number">06</span>
+            <h3 class="project-card__title">Fetch API Resource Explorer</h3>
+            <p class="project-card__goal">Search and display results from a real API. Async/await, loading states, error handling.</p>
+            <div class="project-card__tags">
+              <span class="tag">fetch</span><span class="tag">async/await</span><span class="tag">Promises</span><span class="tag">URL API</span>
+            </div>
+          </article>
+          <article class="project-card">
+            <span class="project-card__number">07</span>
+            <h3 class="project-card__title">Intersection Observer: Scroll Spy</h3>
+            <p class="project-card__goal">Sections highlight in nav as you scroll; elements animate when visible.</p>
+            <div class="project-card__tags">
+              <span class="tag">IntersectionObserver</span><span class="tag">CSS keyframes</span><span class="tag">class toggling</span>
+            </div>
+          </article>
+          <article class="project-card">
+            <span class="project-card__number">08</span>
+            <h3 class="project-card__title">Mutation Observer: Live DOM Watcher</h3>
+            <p class="project-card__goal">Changing attributes or DOM nodes triggers logs and UI updates.</p>
+            <div class="project-card__tags">
+              <span class="tag">MutationObserver</span><span class="tag">attributes</span><span class="tag">childList</span>
+            </div>
+          </article>
+          <article class="project-card">
+            <span class="project-card__number">09</span>
+            <h3 class="project-card__title">CustomEvent Messaging</h3>
+            <p class="project-card__goal">Modules communicate via events without direct imports. Cart, theme, notifications.</p>
+            <div class="project-card__tags">
+              <span class="tag">CustomEvent</span><span class="tag">dispatchEvent</span><span class="tag">addEventListener</span>
+            </div>
+          </article>
+          <article class="project-card">
+            <span class="project-card__number">10</span>
+            <h3 class="project-card__title">Web Components</h3>
+            <p class="project-card__goal">Create reusable &lt;product-card&gt; and &lt;toast-message&gt; custom elements.</p>
+            <div class="project-card__tags">
+              <span class="tag">Custom Elements</span><span class="tag">lifecycle callbacks</span><span class="tag">templates</span>
+            </div>
+          </article>
+          <article class="project-card">
+            <span class="project-card__number">11</span>
+            <h3 class="project-card__title">Animation Toolkit</h3>
+            <p class="project-card__goal">Build a small animation library and demo page. CSS + JS motion techniques.</p>
+            <div class="project-card__tags">
+              <span class="tag">CSS transitions</span><span class="tag">keyframes</span><span class="tag">requestAnimationFrame</span>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- Level 3 -->
+      <div class="level level--3">
+        <h2 class="level__title">Level 3 — React Fundamentals</h2>
+        <div class="level__grid">
+          <article class="project-card">
+            <span class="project-card__number">12</span>
+            <h3 class="project-card__title">React Data Catalog Rewrite</h3>
+            <p class="project-card__goal">Rebuild the Level 1 catalog in React. Components, props, state, rendering lists.</p>
+            <div class="project-card__tags">
+              <span class="tag">React</span><span class="tag">components</span><span class="tag">props</span><span class="tag">state</span><span class="tag">keys</span>
+            </div>
+          </article>
+          <article class="project-card">
+            <span class="project-card__number">13</span>
+            <h3 class="project-card__title">React Hooks + Async Search</h3>
+            <p class="project-card__goal">Fetch data, cache responses, handle loading/errors. URL param sync.</p>
+            <div class="project-card__tags">
+              <span class="tag">useEffect</span><span class="tag">useState</span><span class="tag">debouncing</span><span class="tag">request cancellation</span>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- Level 4 -->
+      <div class="level level--4">
+        <h2 class="level__title">Level 4 — Next.js</h2>
+        <div class="level__grid">
+          <article class="project-card">
+            <span class="project-card__number">14</span>
+            <h3 class="project-card__title">Next.js Dashboard with Routes</h3>
+            <p class="project-card__goal">Multi-page app with shared layout, navigation, file-based routing.</p>
+            <div class="project-card__tags">
+              <span class="tag">App Router</span><span class="tag">layouts</span><span class="tag">server/client components</span>
+            </div>
+          </article>
+          <article class="project-card">
+            <span class="project-card__number">15</span>
+            <h3 class="project-card__title">Next.js Observer + Components Showcase</h3>
+            <p class="project-card__goal">Portfolio-grade capstone combining Observers, Web Components, events, storage.</p>
+            <div class="project-card__tags">
+              <span class="tag">IntersectionObserver</span><span class="tag">MutationObserver</span><span class="tag">CustomEvent</span><span class="tag">capstone</span>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- Bonus -->
+      <div class="level level--bonus">
+        <h2 class="level__title">Bonus — Experimental</h2>
+        <div class="level__grid">
+          <article class="project-card">
+            <span class="project-card__number">16</span>
+            <h3 class="project-card__title">Invoker Command API Demo</h3>
+            <p class="project-card__goal">Tiny demo using the Invoker pattern with fallbacks. Learn to adopt new browser APIs safely.</p>
+            <div class="project-card__tags">
+              <span class="tag">Invoker API</span><span class="tag">progressive enhancement</span>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- Concept Mapping -->
+      <div class="mapping">
+        <h2 class="mapping__title">Concept → Project Mapping</h2>
+        <ul class="mapping__list">
+          <li class="mapping__item"><strong>Arrays / Objects / Sets / Maps + methods:</strong> Projects 1, 3, 4 (reused everywhere)</li>
+          <li class="mapping__item"><strong>for…in vs for…of vs forEach:</strong> Project 1 drills + used repeatedly</li>
+          <li class="mapping__item"><strong>Semantic HTML / CSS:</strong> Projects 2, 5, plus every project</li>
+          <li class="mapping__item"><strong>Animation (CSS + JS):</strong> Projects 2, 7, 11</li>
+          <li class="mapping__item"><strong>Fetch + async/await:</strong> Projects 6, 13</li>
+          <li class="mapping__item"><strong>Intersection Observer:</strong> Projects 7, 15</li>
+          <li class="mapping__item"><strong>Mutation Observer:</strong> Projects 8, 15</li>
+          <li class="mapping__item"><strong>CustomEvent:</strong> Projects 9, 10, 15</li>
+          <li class="mapping__item"><strong>Web Components:</strong> Projects 10, 15</li>
+          <li class="mapping__item"><strong>URL API:</strong> Projects 6, 13</li>
+          <li class="mapping__item"><strong>Local / Session Storage:</strong> Projects 5, 15</li>
+          <li class="mapping__item"><strong>Invoker Command API:</strong> Project 16</li>
+          <li class="mapping__item"><strong>React + Next.js:</strong> Projects 12–15</li>
+        </ul>
+      </div>
+
+    </section>
+
+    <!-- ================= FRAMEWORK TAB ================= -->
+    <section id="framework" class="tab-panel" role="tabpanel">
+      <div class="framework" id="frameworkAccordion">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // ---- Tab switching ----
+    const tabBtns = document.querySelectorAll('.tabs__btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => { b.classList.remove('tabs__btn--active'); b.setAttribute('aria-selected', 'false'); });
+        tabPanels.forEach(p => p.classList.remove('tab-panel--active'));
+
+        btn.classList.add('tabs__btn--active');
+        btn.setAttribute('aria-selected', 'true');
+        document.getElementById(btn.dataset.tab).classList.add('tab-panel--active');
+      });
+    });
+
+    // ---- Framework accordion data ----
+    const frameworkSections = [
+      {
+        title: "🧩 Framework Overview",
+        content: `
+          <p>All generated projects must:</p>
+          <ol>
+            <li>Be structured as <strong>step-by-step tutorials</strong>.</li>
+            <li>Contain <strong>clearly separated blocks</strong> of code (HTML, CSS, JavaScript).</li>
+            <li>After each block, include a detailed <strong>explanation</strong> section:
+              <ul>
+                <li><strong>HTML</strong> → purpose of each element + <strong>why that semantic tag</strong> was chosen.</li>
+                <li><strong>CSS</strong> → visual purpose + <strong>BEM naming rationale</strong> (Block vs Element vs Modifier).</li>
+                <li><strong>JavaScript</strong> → what it does, how it works, why it's written that way.</li>
+              </ul>
+            </li>
+            <li>Use consistent Markdown formatting for readability.</li>
+            <li>Include <strong>core features</strong> and <strong>Extension</strong> ideas.</li>
+          </ol>
+        `
+      },
+      {
+        title: "Step 1 — Project Overview + Learning Objectives",
+        badge: "Step 1",
+        content: `
+          <p>Every project begins with a clear title, description, and a <strong>Learning Objectives</strong> list.</p>
+          <blockquote>
+            <strong>By the end of this project, you will be able to:</strong><br>
+            1. Use <code>setInterval()</code> to run code on a repeating timer.<br>
+            2. Select and update DOM elements with <code>getElementById()</code>.<br>
+            3. Work with the <code>Date</code> object.<br>
+            4. Persist preferences in <code>localStorage</code>.
+          </blockquote>
+          <p>Every concept listed here will be covered in code, explained in detail, and <strong>quizzed at the end</strong>.</p>
+        `
+      },
+      {
+        title: "Step 2 — Project Setup",
+        badge: "Step 2",
+        content: `<p>Create a project folder with <code>index.html</code>, <code>style.css</code>, and <code>script.js</code>. Explain what each file is for and how they connect.</p>`
+      },
+      {
+        title: "Step 3 — HTML (Semantic Elements)",
+        badge: "Step 3",
+        content: `
+          <p>All HTML must use <strong>semantic elements</strong>. For every element explain:</p>
+          <ol>
+            <li><strong>What</strong> the element does — its role in the page.</li>
+            <li><strong>Why</strong> this semantic tag was chosen over a <code>&lt;div&gt;</code>.</li>
+            <li><strong>What would be wrong</strong> with a non-semantic alternative.</li>
+          </ol>
+          <p><strong>Common semantic elements to use:</strong></p>
+          <ul>
+            <li><code>&lt;header&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;footer&gt;</code>, <code>&lt;nav&gt;</code> — page landmarks</li>
+            <li><code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;aside&gt;</code> — grouping</li>
+            <li><code>&lt;figure&gt;</code>, <code>&lt;figcaption&gt;</code> — media</li>
+            <li><code>&lt;button&gt;</code> (not <code>&lt;div onclick&gt;</code>) — controls</li>
+            <li><code>&lt;form&gt;</code>, <code>&lt;label&gt;</code>, <code>&lt;fieldset&gt;</code> — forms</li>
+          </ul>
+          <blockquote>Never use a <code>&lt;div&gt;</code> or <code>&lt;span&gt;</code> when a semantic element exists. If one is genuinely needed, explain why.</blockquote>
+        `
+      },
+      {
+        title: "Step 4 — CSS (BEM Naming Convention)",
+        badge: "Step 4",
+        content: `
+          <p>All CSS must follow <strong>BEM (Block Element Modifier)</strong>.</p>
+          <ul>
+            <li><strong>Block</strong> — standalone component: <code>.clock</code>, <code>.todo</code></li>
+            <li><strong>Element</strong> — part of a block: <code>.clock__time</code>, <code>.todo__item</code></li>
+            <li><strong>Modifier</strong> — variation/state: <code>.clock__time--hidden</code>, <code>.btn--primary</code></li>
+          </ul>
+          <p><strong>Rules:</strong></p>
+          <ol>
+            <li>Never nest BEM selectors (<code>.clock .clock__time</code> is wrong).</li>
+            <li>No generic names like <code>.container</code> without a block prefix.</li>
+            <li>Always explain <strong>why</strong> a class is a Block vs Element vs Modifier.</li>
+          </ol>
+        `
+      },
+      {
+        title: "Step 5 — JavaScript + Explanation",
+        badge: "Step 5",
+        content: `
+          <p>Explain <strong>what</strong> each function does, <strong>how</strong> it works, and <strong>why</strong> these methods are appropriate.</p>
+          <p><strong>Ultra-detailed depth:</strong></p>
+          <ol>
+            <li><strong>Name and define</strong> every API/method introduced.</li>
+            <li><strong>State &amp; rendering:</strong> how state is stored, how rendering derives the view.</li>
+            <li><strong>Return types:</strong> what each method returns (HTMLElement, string, boolean, etc.).</li>
+            <li><strong>Why this, not that:</strong> at least one alternative and why the chosen approach fits.</li>
+            <li><strong>Safety notes:</strong> XSS risks with innerHTML, JSON.parse null handling.</li>
+            <li><strong>Performance hint:</strong> event delegation, re-rendering tradeoffs.</li>
+          </ol>
+        `
+      },
+      {
+        title: "Step 6 — Testing",
+        badge: "Step 6",
+        content: `<p>Open <code>index.html</code> in the browser, verify output, and check the console for errors. Cover basic <strong>browser dev tools</strong> debugging.</p>`
+      },
+      {
+        title: "Step 7 — Project Complete",
+        badge: "Step 7",
+        content: `
+          <p>The defined <strong>end</strong> of the project.</p>
+          <ul>
+            <li>Summarize what was built in 2–3 sentences.</li>
+            <li>Revisit the Learning Objectives and confirm each was covered.</li>
+            <li>List every key method, DOM operation, and concept used.</li>
+          </ul>
+        `
+      },
+      {
+        title: "Step 8 — Readiness Quiz",
+        badge: "Step 8",
+        content: `
+          <p>5–8 questions mapped to Learning Objectives. Mix these types:</p>
+          <ul>
+            <li><strong>Conceptual</strong> — "What does <code>setInterval()</code> return?"</li>
+            <li><strong>Predict the output</strong> — "What will this log?"</li>
+            <li><strong>Spot the bug</strong> — find the error in a snippet.</li>
+            <li><strong>Compare &amp; contrast</strong> — e.g., <code>textContent</code> vs <code>innerHTML</code>.</li>
+            <li><strong>Apply it</strong> — "How would you stop a running interval?"</li>
+          </ul>
+          <p>Present all questions at once. Score after answers. ✅ correct / ❌ incorrect with explanations for all.</p>
+        `
+      },
+      {
+        title: "Step 9 — Remediation",
+        badge: "Step 9",
+        content: `
+          <p>If any quiz answers were wrong:</p>
+          <ol>
+            <li><strong>Identify missed concepts</strong> — group by Learning Objective.</li>
+            <li><strong>Re-explain</strong> with a new analogy or different example.</li>
+            <li><strong>Generate a Mini-Project</strong> (15–30 min) if the concept is non-trivial. Follows the same framework but shorter. Ends with 2–3 targeted follow-up questions.</li>
+            <li><strong>Re-quiz only the missed concepts.</strong> Repeat until all pass.</li>
+          </ol>
+          <p>If all correct → skip remediation, offer extensions, and confirm ready for next project.</p>
+        `
+      },
+      {
+        title: "Step 10 — Extensions (Optional)",
+        badge: "Step 10",
+        content: `<p>Offered <strong>only after passing</strong> the Readiness Quiz. Self-directed features like combining projects, adding localStorage, visual enhancements. No quiz required.</p>`
+      },
+      {
+        title: "📐 Rules for All Projects",
+        content: `
+          <div class="rules-grid">
+            <div class="rule-card"><span class="rule-card__num">1</span> <strong>Semantic HTML</strong> — every element must be the most meaningful tag, with why it was chosen.</div>
+            <div class="rule-card"><span class="rule-card__num">2</span> <strong>Modern CSS + BEM</strong> — flexbox/grid with BEM naming. Explain Block/Element/Modifier reasoning.</div>
+            <div class="rule-card"><span class="rule-card__num">3</span> <strong>Vanilla JavaScript</strong> — no frameworks unless specified.</div>
+            <div class="rule-card"><span class="rule-card__num">4</span> <strong>Educational explanations</strong> — every function/method gets one.</div>
+            <div class="rule-card"><span class="rule-card__num">5</span> <strong>Beginner perspective</strong> — explanations assume a learner audience.</div>
+            <div class="rule-card"><span class="rule-card__num">6</span> <strong>Extensions</strong> — always provide next-step ideas.</div>
+            <div class="rule-card"><span class="rule-card__num">7</span> <strong>No skipping</strong> — every code block must have an explanation.</div>
+            <div class="rule-card"><span class="rule-card__num">8</span> <strong>Clean Markdown</strong> — copyable format.</div>
+            <div class="rule-card"><span class="rule-card__num">9</span> <strong>Learning Objectives → Quiz</strong> — begin with objectives, end with quiz.</div>
+            <div class="rule-card"><span class="rule-card__num">10</span> <strong>Quiz ↔ Objectives</strong> — never quiz on untaught material.</div>
+            <div class="rule-card"><span class="rule-card__num">11</span> <strong>Remediation</strong> — missed answers trigger re-explanation + optional mini-project.</div>
+          </div>
+        `
+      }
+    ];
+
+    // ---- Build accordion ----
+    const accordion = document.getElementById('frameworkAccordion');
+
+    frameworkSections.forEach((section, i) => {
+      const div = document.createElement('div');
+      div.className = 'fw-section' + (i === 0 ? ' fw-section--open' : '');
+
+      const header = document.createElement('div');
+      header.className = 'fw-section__header';
+      header.innerHTML = `<span class="fw-section__title">${section.title}</span><span class="fw-section__icon">▾</span>`;
+
+      const body = document.createElement('div');
+      body.className = 'fw-section__body';
+
+      const badge = section.badge ? `<span class="step-badge">${section.badge}</span>` : '';
+      body.innerHTML = `<div class="fw-section__content">${badge}${section.content}</div>`;
+
+      header.addEventListener('click', () => {
+        div.classList.toggle('fw-section--open');
+      });
+
+      div.appendChild(header);
+      div.appendChild(body);
+      accordion.appendChild(div);
+    });
+  </script>
+</body>
+
+</html>
