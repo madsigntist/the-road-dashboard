@@ -52,10 +52,27 @@
       letter-spacing: -0.02em;
     }
 
-    .dash__subtitle {
+    .dash__quote {
       color: var(--muted);
       font-size: 0.95rem;
-      margin-top: 4px;
+      margin-top: 8px;
+      padding: 0;
+      border: none;
+      font-style: italic;
+    }
+
+    .dash__quote p {
+      margin: 0;
+    }
+
+    .dash__quote footer {
+      margin-top: 2px;
+      font-style: normal;
+      font-size: 0.85rem;
+    }
+
+    .dash__quote cite {
+      font-style: normal;
     }
 
     /* ---- tabs ---- */
@@ -368,24 +385,27 @@
     .rule-card strong { color: var(--text); }
   </style>
 </head>
-
+<!-- ADD ALL ADDITIONAL PROJECTS IN ANOTHER TAB/SECTION - react tic tac toe, JS note app, etc. -->
 <body>
-  <div class="dash">
+  <main class="dash">
     <header class="dash__header">
       <h1 class="dash__title">The Road</h1>
-      <p class="dash__subtitle">JavaScript learning roadmap &amp; project framework</p>
+      <blockquote class="dash__quote">
+        <p>Faster, faster, until the thrill of speed overcomes the fear of death.</p>
+        <footer>— <cite>Hunter S. Thompson</cite></footer>
+      </blockquote>
     </header>
 
     <nav class="tabs" role="tablist">
-      <button class="tabs__btn tabs__btn--active" role="tab" data-tab="roadmap" aria-selected="true">Project Roadmap</button>
-      <button class="tabs__btn" role="tab" data-tab="framework" aria-selected="false">Learning Framework</button>
+      <button class="tabs__btn tabs__btn--active" role="tab" data-tab="roadmap" aria-selected="true">Frontend Project Roadmap</button>
+      <button class="tabs__btn" role="tab" data-tab="about" aria-selected="false">About Me</button>
     </nav>
 
     <!-- ================= ROADMAP TAB ================= -->
     <section id="roadmap" class="tab-panel tab-panel--active" role="tabpanel">
 
       <!-- Level 1 -->
-      <div class="level">
+      <section class="level">
         <h2 class="level__title">Level 1 — Core JavaScript + DOM + Semantic HTML/CSS</h2>
         <div class="level__grid">
           <article class="project-card">
@@ -416,10 +436,15 @@
           </article>
           <article class="project-card">
             <span class="project-card__number">03</span>
+            <span class="project-card__badge project-card__badge--completed">Completed</span>
             <h3 class="project-card__title">Array Methods Catalog</h3>
             <p class="project-card__goal">Mini product catalog with search, filters, and sorting using array methods.</p>
             <div class="project-card__tags">
               <span class="tag">filter</span><span class="tag">map</span><span class="tag">find</span><span class="tag">reduce</span><span class="tag">sort/toSorted</span><span class="tag">debounce</span>
+            </div>
+            <div class="project-card__links">
+              <a class="project-card__link" href="https://github.com/madsigntist/array-methods-catalog" target="_blank" rel="noopener noreferrer">Repo ↗</a>
+              <a class="project-card__link" href="https://madsigntist.github.io/array-methods-catalog/" target="_blank" rel="noopener noreferrer">Live Demo ↗</a>
             </div>
           </article>
           <article class="project-card">
@@ -439,10 +464,10 @@
             </div>
           </article>
         </div>
-      </div>
+      </section>
 
       <!-- Level 2 -->
-      <div class="level level--2">
+      <section class="level level--2">
         <h2 class="level__title">Level 2 — Browser APIs + Async/Await + Real UI Patterns</h2>
         <div class="level__grid">
           <article class="project-card">
@@ -494,10 +519,10 @@
             </div>
           </article>
         </div>
-      </div>
+      </section>
 
       <!-- Level 3 -->
-      <div class="level level--3">
+      <section class="level level--3">
         <h2 class="level__title">Level 3 — React Fundamentals</h2>
         <div class="level__grid">
           <article class="project-card">
@@ -517,10 +542,10 @@
             </div>
           </article>
         </div>
-      </div>
+      </section>
 
       <!-- Level 4 -->
-      <div class="level level--4">
+      <section class="level level--4">
         <h2 class="level__title">Level 4 — Next.js</h2>
         <div class="level__grid">
           <article class="project-card">
@@ -540,10 +565,10 @@
             </div>
           </article>
         </div>
-      </div>
+      </section>
 
       <!-- Bonus -->
-      <div class="level level--bonus">
+      <section class="level level--bonus">
         <h2 class="level__title">Bonus — Experimental</h2>
         <div class="level__grid">
           <article class="project-card">
@@ -555,10 +580,10 @@
             </div>
           </article>
         </div>
-      </div>
+      </section>
 
       <!-- Concept Mapping -->
-      <div class="mapping">
+      <section class="mapping">
         <h2 class="mapping__title">Concept → Project Mapping</h2>
         <ul class="mapping__list">
           <li class="mapping__item"><strong>Arrays / Objects / Sets / Maps + methods:</strong> Projects 1, 3, 4 (reused everywhere)</li>
@@ -575,18 +600,18 @@
           <li class="mapping__item"><strong>Invoker Command API:</strong> Project 16</li>
           <li class="mapping__item"><strong>React + Next.js:</strong> Projects 12–15</li>
         </ul>
-      </div>
+      </section>
 
     </section>
 
-    <!-- ================= FRAMEWORK TAB ================= -->
-    <section id="framework" class="tab-panel" role="tabpanel">
-      <div class="framework" id="frameworkAccordion">
-        <!-- Populated by JS -->
-      </div>
+    <!-- ================= ABOUT ME TAB ================= -->
+    <section id="about" class="tab-panel" role="tabpanel">
+      <section class="mapping">
+        <h2 class="mapping__title">Michael Kelly — Web Developer</h2>
+      </section>
     </section>
 
-  </div>
+  </main>
 
   <script>
     // ---- Tab switching ----
@@ -602,199 +627,6 @@
         btn.setAttribute('aria-selected', 'true');
         document.getElementById(btn.dataset.tab).classList.add('tab-panel--active');
       });
-    });
-
-    // ---- Framework accordion data ----
-    const frameworkSections = [
-      {
-        title: "🧩 Framework Overview",
-        content: `
-          <p>All generated projects must:</p>
-          <ol>
-            <li>Be structured as <strong>step-by-step tutorials</strong>.</li>
-            <li>Contain <strong>clearly separated blocks</strong> of code (HTML, CSS, JavaScript).</li>
-            <li>After each block, include a detailed <strong>explanation</strong> section:
-              <ul>
-                <li><strong>HTML</strong> → purpose of each element + <strong>why that semantic tag</strong> was chosen.</li>
-                <li><strong>CSS</strong> → visual purpose + <strong>BEM naming rationale</strong> (Block vs Element vs Modifier).</li>
-                <li><strong>JavaScript</strong> → what it does, how it works, why it's written that way.</li>
-              </ul>
-            </li>
-            <li>Use consistent Markdown formatting for readability.</li>
-            <li>Include <strong>core features</strong> and <strong>Extension</strong> ideas.</li>
-          </ol>
-        `
-      },
-      {
-        title: "Step 1 — Project Overview + Learning Objectives",
-        badge: "Step 1",
-        content: `
-          <p>Every project begins with a clear title, description, and a <strong>Learning Objectives</strong> list.</p>
-          <blockquote>
-            <strong>By the end of this project, you will be able to:</strong><br>
-            1. Use <code>setInterval()</code> to run code on a repeating timer.<br>
-            2. Select and update DOM elements with <code>getElementById()</code>.<br>
-            3. Work with the <code>Date</code> object.<br>
-            4. Persist preferences in <code>localStorage</code>.
-          </blockquote>
-          <p>Every concept listed here will be covered in code, explained in detail, and <strong>quizzed at the end</strong>.</p>
-        `
-      },
-      {
-        title: "Step 2 — Project Setup",
-        badge: "Step 2",
-        content: `<p>Create a project folder with <code>index.html</code>, <code>style.css</code>, and <code>script.js</code>. Explain what each file is for and how they connect.</p>`
-      },
-      {
-        title: "Step 3 — HTML (Semantic Elements)",
-        badge: "Step 3",
-        content: `
-          <p>All HTML must use <strong>semantic elements</strong>. For every element explain:</p>
-          <ol>
-            <li><strong>What</strong> the element does — its role in the page.</li>
-            <li><strong>Why</strong> this semantic tag was chosen over a <code>&lt;div&gt;</code>.</li>
-            <li><strong>What would be wrong</strong> with a non-semantic alternative.</li>
-          </ol>
-          <p><strong>Common semantic elements to use:</strong></p>
-          <ul>
-            <li><code>&lt;header&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;footer&gt;</code>, <code>&lt;nav&gt;</code> — page landmarks</li>
-            <li><code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;aside&gt;</code> — grouping</li>
-            <li><code>&lt;figure&gt;</code>, <code>&lt;figcaption&gt;</code> — media</li>
-            <li><code>&lt;button&gt;</code> (not <code>&lt;div onclick&gt;</code>) — controls</li>
-            <li><code>&lt;form&gt;</code>, <code>&lt;label&gt;</code>, <code>&lt;fieldset&gt;</code> — forms</li>
-          </ul>
-          <blockquote>Never use a <code>&lt;div&gt;</code> or <code>&lt;span&gt;</code> when a semantic element exists. If one is genuinely needed, explain why.</blockquote>
-        `
-      },
-      {
-        title: "Step 4 — CSS (BEM Naming Convention)",
-        badge: "Step 4",
-        content: `
-          <p>All CSS must follow <strong>BEM (Block Element Modifier)</strong>.</p>
-          <ul>
-            <li><strong>Block</strong> — standalone component: <code>.clock</code>, <code>.todo</code></li>
-            <li><strong>Element</strong> — part of a block: <code>.clock__time</code>, <code>.todo__item</code></li>
-            <li><strong>Modifier</strong> — variation/state: <code>.clock__time--hidden</code>, <code>.btn--primary</code></li>
-          </ul>
-          <p><strong>Rules:</strong></p>
-          <ol>
-            <li>Never nest BEM selectors (<code>.clock .clock__time</code> is wrong).</li>
-            <li>No generic names like <code>.container</code> without a block prefix.</li>
-            <li>Always explain <strong>why</strong> a class is a Block vs Element vs Modifier.</li>
-          </ol>
-        `
-      },
-      {
-        title: "Step 5 — JavaScript + Explanation",
-        badge: "Step 5",
-        content: `
-          <p>Explain <strong>what</strong> each function does, <strong>how</strong> it works, and <strong>why</strong> these methods are appropriate.</p>
-          <p><strong>Ultra-detailed depth:</strong></p>
-          <ol>
-            <li><strong>Name and define</strong> every API/method introduced.</li>
-            <li><strong>State &amp; rendering:</strong> how state is stored, how rendering derives the view.</li>
-            <li><strong>Return types:</strong> what each method returns (HTMLElement, string, boolean, etc.).</li>
-            <li><strong>Why this, not that:</strong> at least one alternative and why the chosen approach fits.</li>
-            <li><strong>Safety notes:</strong> XSS risks with innerHTML, JSON.parse null handling.</li>
-            <li><strong>Performance hint:</strong> event delegation, re-rendering tradeoffs.</li>
-          </ol>
-        `
-      },
-      {
-        title: "Step 6 — Testing",
-        badge: "Step 6",
-        content: `<p>Open <code>index.html</code> in the browser, verify output, and check the console for errors. Cover basic <strong>browser dev tools</strong> debugging.</p>`
-      },
-      {
-        title: "Step 7 — Project Complete",
-        badge: "Step 7",
-        content: `
-          <p>The defined <strong>end</strong> of the project.</p>
-          <ul>
-            <li>Summarize what was built in 2–3 sentences.</li>
-            <li>Revisit the Learning Objectives and confirm each was covered.</li>
-            <li>List every key method, DOM operation, and concept used.</li>
-          </ul>
-        `
-      },
-      {
-        title: "Step 8 — Readiness Quiz",
-        badge: "Step 8",
-        content: `
-          <p>5–8 questions mapped to Learning Objectives. Mix these types:</p>
-          <ul>
-            <li><strong>Conceptual</strong> — "What does <code>setInterval()</code> return?"</li>
-            <li><strong>Predict the output</strong> — "What will this log?"</li>
-            <li><strong>Spot the bug</strong> — find the error in a snippet.</li>
-            <li><strong>Compare &amp; contrast</strong> — e.g., <code>textContent</code> vs <code>innerHTML</code>.</li>
-            <li><strong>Apply it</strong> — "How would you stop a running interval?"</li>
-          </ul>
-          <p>Present all questions at once. Score after answers. ✅ correct / ❌ incorrect with explanations for all.</p>
-        `
-      },
-      {
-        title: "Step 9 — Remediation",
-        badge: "Step 9",
-        content: `
-          <p>If any quiz answers were wrong:</p>
-          <ol>
-            <li><strong>Identify missed concepts</strong> — group by Learning Objective.</li>
-            <li><strong>Re-explain</strong> with a new analogy or different example.</li>
-            <li><strong>Generate a Mini-Project</strong> (15–30 min) if the concept is non-trivial. Follows the same framework but shorter. Ends with 2–3 targeted follow-up questions.</li>
-            <li><strong>Re-quiz only the missed concepts.</strong> Repeat until all pass.</li>
-          </ol>
-          <p>If all correct → skip remediation, offer extensions, and confirm ready for next project.</p>
-        `
-      },
-      {
-        title: "Step 10 — Extensions (Optional)",
-        badge: "Step 10",
-        content: `<p>Offered <strong>only after passing</strong> the Readiness Quiz. Self-directed features like combining projects, adding localStorage, visual enhancements. No quiz required.</p>`
-      },
-      {
-        title: "📐 Rules for All Projects",
-        content: `
-          <div class="rules-grid">
-            <div class="rule-card"><span class="rule-card__num">1</span> <strong>Semantic HTML</strong> — every element must be the most meaningful tag, with why it was chosen.</div>
-            <div class="rule-card"><span class="rule-card__num">2</span> <strong>Modern CSS + BEM</strong> — flexbox/grid with BEM naming. Explain Block/Element/Modifier reasoning.</div>
-            <div class="rule-card"><span class="rule-card__num">3</span> <strong>Vanilla JavaScript</strong> — no frameworks unless specified.</div>
-            <div class="rule-card"><span class="rule-card__num">4</span> <strong>Educational explanations</strong> — every function/method gets one.</div>
-            <div class="rule-card"><span class="rule-card__num">5</span> <strong>Beginner perspective</strong> — explanations assume a learner audience.</div>
-            <div class="rule-card"><span class="rule-card__num">6</span> <strong>Extensions</strong> — always provide next-step ideas.</div>
-            <div class="rule-card"><span class="rule-card__num">7</span> <strong>No skipping</strong> — every code block must have an explanation.</div>
-            <div class="rule-card"><span class="rule-card__num">8</span> <strong>Clean Markdown</strong> — copyable format.</div>
-            <div class="rule-card"><span class="rule-card__num">9</span> <strong>Learning Objectives → Quiz</strong> — begin with objectives, end with quiz.</div>
-            <div class="rule-card"><span class="rule-card__num">10</span> <strong>Quiz ↔ Objectives</strong> — never quiz on untaught material.</div>
-            <div class="rule-card"><span class="rule-card__num">11</span> <strong>Remediation</strong> — missed answers trigger re-explanation + optional mini-project.</div>
-          </div>
-        `
-      }
-    ];
-
-    // ---- Build accordion ----
-    const accordion = document.getElementById('frameworkAccordion');
-
-    frameworkSections.forEach((section, i) => {
-      const div = document.createElement('div');
-      div.className = 'fw-section' + (i === 0 ? ' fw-section--open' : '');
-
-      const header = document.createElement('div');
-      header.className = 'fw-section__header';
-      header.innerHTML = `<span class="fw-section__title">${section.title}</span><span class="fw-section__icon">▾</span>`;
-
-      const body = document.createElement('div');
-      body.className = 'fw-section__body';
-
-      const badge = section.badge ? `<span class="step-badge">${section.badge}</span>` : '';
-      body.innerHTML = `<div class="fw-section__content">${badge}${section.content}</div>`;
-
-      header.addEventListener('click', () => {
-        div.classList.toggle('fw-section--open');
-      });
-
-      div.appendChild(header);
-      div.appendChild(body);
-      accordion.appendChild(div);
     });
   </script>
 </body>
