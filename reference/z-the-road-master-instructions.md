@@ -240,6 +240,50 @@ Must teach:
 
 ---
 
+# JavaScript Coding Standards
+
+All JavaScript code written in lesson files must strictly follow the workspace `copilot-instructions.md` JS standards. These apply to every code block, every inline example, and every snippet shown in explanations.
+
+## Required in every lesson
+
+- **JSDoc blocks** on every named function — must include `@param` tags for each parameter and a `@return` tag. Use `@return {void}` for functions that return nothing.
+- **Arrow functions** for all anonymous callbacks passed to `addEventListener()` and similar methods. Never use `function ()` for callbacks.
+- **`const` everywhere** — only use `let` when a value must be reassigned. Never use `var`.
+- **`UPPER_SNAKE_CASE`** for all truly immutable constants (e.g., `const MAX_ITEMS = 10`).
+- **`camelCase`** for all variable and function names.
+- **Mandatory semicolons** — do not rely on ASI.
+- **2-space indentation**.
+- **Egyptian-style braces** — opening brace on the same line as the statement.
+- **No `eval()`** — forbidden without exception.
+- **No primitive wrappers** — never `new Number()`, `new String()`, or `new Boolean()`.
+
+## JSDoc format
+
+Every non-trivial named function must have a JSDoc block immediately above its declaration:
+
+```js
+/**
+ * Brief description of what the function does.
+ * @param {type} paramName Description of the parameter.
+ * @return {type} Description of the return value.
+ */
+function exampleFunction(paramName) { ... }
+```
+
+## Arrow functions for callbacks
+
+All anonymous functions passed as callbacks must use arrow syntax:
+
+```js
+// Correct
+element.addEventListener("click", () => { ... });
+
+// Wrong — do not use
+element.addEventListener("click", function () { ... });
+```
+
+---
+
 # Readiness Quiz Rules
 
 Every project must end with a readiness quiz.
@@ -811,6 +855,58 @@ z-the-road/
 ```
 
 This convention must be followed for every project from Project 4 onward.
+
+---
+
+# Lesson Session Commands
+
+## `pause lesson`
+
+When the user types `pause lesson` during an active lesson session:
+
+1. Create or update `savepoint.md` in the current project folder (e.g., `05-storage-based-app/savepoint.md`).
+2. The savepoint must record:
+   - Project name and number
+   - Current status (IN PROGRESS / COMPLETE)
+   - The last completed step by name and number
+   - The exact next action to resume from (step name + block name if inside JavaScript)
+   - A checklist of all completed steps
+   - A checklist of all remaining steps
+3. Confirm to the user that the savepoint was created and state where to resume.
+
+### Savepoint format
+
+```markdown
+# Savepoint — Project N: Project Name
+
+## Status: IN PROGRESS
+
+## Last completed step
+
+Step N: Step Name — brief status note.
+
+## Next action
+
+Resume at Step N: Step Name — Block N (block name if applicable)
+
+## Completed steps
+
+- Step 1: ...
+- Step 2: ...
+
+## Remaining steps
+
+- Step N: ...
+- Step N+1: ...
+```
+
+## `resume lesson`
+
+When the user types `resume lesson`:
+
+1. Read the `savepoint.md` in the current project folder.
+2. Confirm the resume point to the user.
+3. Continue the lesson from exactly where it left off — do not re-present already completed steps.
 
 ---
 
